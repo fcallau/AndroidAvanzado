@@ -6,11 +6,23 @@ import java.util.*
  * Shop: represents one Shop
  *
  */
-data class Shop(val id: Int, val name: String, val address: String) {
+data class Shop(val id: Int, val name: String, val address: String, val description: String,
+                val latitude: Float, val longitude: Float, val img: String, val logo: String, val openingHours: String) {
     init {
        Shops(ArrayList<Shop>())
     }
 }
+
+/*val id: Long,
+val databaseId: Long,
+val name: String,
+@JsonProperty("description_en") val description: String,
+@JsonProperty("gps_lat") val latitude: String,
+@JsonProperty("gps_lon") val longitude: String,
+val img: String,
+@JsonProperty("logo_img") val logo: String,
+@JsonProperty("opening_hours_en")val openingHours: String,
+val address: String*/
 
 class Shops(val shops: MutableList<Shop>): Aggregate<Shop> {
     override fun count(): Int = shops.size

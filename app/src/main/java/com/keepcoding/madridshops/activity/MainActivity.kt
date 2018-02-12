@@ -7,9 +7,12 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.DefaultItemAnimator
+import android.support.v7.widget.GridLayoutManager
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -18,18 +21,20 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.keepcoding.madridshops.R
+import com.keepcoding.madridshops.adapter.ItemRecyclerViewAdapter
 import com.keepcoding.madridshops.domain.interactor.ErrorCompletion
 import com.keepcoding.madridshops.domain.interactor.SuccessCompletion
 import com.keepcoding.madridshops.domain.interactor.getallshops.GetAllShopsInteractor
 import com.keepcoding.madridshops.domain.interactor.getallshops.GetAllShopsInteractorImpl
+import com.keepcoding.madridshops.domain.model.Shop
 import com.keepcoding.madridshops.domain.model.Shops
-import com.keepcoding.madridshops.fragment.ListFragment
 import com.keepcoding.madridshops.router.Router
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    var listFragment: ListFragment? = null
+    // var listFragment: ListFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +44,24 @@ class MainActivity : AppCompatActivity() {
         Log.d("App", "onCreate MainActivity")
 
         setupMap()
-        listFragment = supportFragmentManager.findFragmentById(R.id.activity_main_list_fragment) as ListFragment
+    }
+
+    private fun setupList(shops: Shops) {
+        val listFragment = supportFragmentManager.findFragmentById(R.id.activity_main_list_fragment)
+
+        val adapter = ItemRecyclerViewAdapter(shops.all())
+        listFragment.items_list.layoutManager = GridLayoutManager(this, 1)
+        listFragment.items_list.itemAnimator = DefaultItemAnimator()
+        listFragment.items_list.adapter = adapter
+
+        /*adapter.onClickListener = View.OnClickListener { v: View ->
+            *//*val position = itemsList.getChildAdapterPosition(v)
+            val tableIndex = arguments.getInt(TableListFragment.EXTRA_TABLE_INDEX, 0)
+
+            // Start ItemDetailActivity
+            startActivity(ItemDetailActivity.intent(activity, position, tableIndex))*//*
+            Log.d("HOLA", "Pressed list button")
+        }*/
     }
 
     private fun setupMap() {
@@ -47,6 +69,8 @@ class MainActivity : AppCompatActivity() {
         getAllShopsInteractor.execute(object: SuccessCompletion<Shops> {
             override fun successCompletion(shops: Shops) {
                 initializeMap(shops)
+
+                setupList(shops)
             }
 
         }, object: ErrorCompletion {
@@ -108,7 +132,8 @@ class MainActivity : AppCompatActivity() {
     fun addAllPins(shops: Shops) {
         for (i in 0 until shops.count()) {
             val shop = shops.get(i)
-            addPin(this.map !!, 40.416775,-3.703790 , shop.name)
+            // addPin(this.map !!, 40.416775,-3.703790 , shop.name)
+            addPin(this.map !!, shop.latitude.toDouble(), shop.longitude.toDouble(), shop.name)
         }
     }
 
