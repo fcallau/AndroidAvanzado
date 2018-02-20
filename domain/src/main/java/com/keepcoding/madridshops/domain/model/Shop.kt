@@ -1,5 +1,6 @@
 package com.keepcoding.madridshops.domain.model
 
+import java.io.Serializable
 import java.util.*
 
 /**
@@ -7,7 +8,7 @@ import java.util.*
  *
  */
 data class Shop(val id: Int, val name: String, val address: String, val description: String,
-                val latitude: Float, val longitude: Float, val img: String, val logo: String, val openingHours: String) {
+                val latitude: Float, val longitude: Float, val img: String, val logo: String, val openingHours: String) : Serializable {
     init {
        Shops(ArrayList<Shop>())
     }

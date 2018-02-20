@@ -19,6 +19,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.keepcoding.madridshops.R
 import com.keepcoding.madridshops.adapter.ItemRecyclerViewAdapter
@@ -32,9 +33,8 @@ import com.keepcoding.madridshops.router.Router
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
-class MainActivity : AppCompatActivity() {
-
-    // var listFragment: ListFragment? = null
+class MainActivity : AppCompatActivity(), GoogleMap.OnMarkerClickListener {
+    var shops: Shops? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,26 +48,39 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupList(shops: Shops) {
         val listFragment = supportFragmentManager.findFragmentById(R.id.activity_main_list_fragment)
+        val mainActivityContext = this.baseContext
 
         val adapter = ItemRecyclerViewAdapter(shops.all())
         listFragment.items_list.layoutManager = GridLayoutManager(this, 1)
         listFragment.items_list.itemAnimator = DefaultItemAnimator()
         listFragment.items_list.adapter = adapter
 
-        /*adapter.onClickListener = View.OnClickListener { v: View ->
-            *//*val position = itemsList.getChildAdapterPosition(v)
+
+
+        adapter.onClickListener = View.OnClickListener { v: View ->
+            /*val position = itemsList.getChildAdapterPosition(v)
             val tableIndex = arguments.getInt(TableListFragment.EXTRA_TABLE_INDEX, 0)
 
             // Start ItemDetailActivity
-            startActivity(ItemDetailActivity.intent(activity, position, tableIndex))*//*
-            Log.d("HOLA", "Pressed list button")
-        }*/
+            startActivity(ItemDetailActivity.intent(activity, position, tableIndex))*/
+            // val itemSelected = adapter.getItem()
+            // Log.d("HOLA", "Pressed list button. itemSelected.name: " + itemSelected.name)
+            // val position = itemsList.getChildAdapterPosition(v)
+            val position = listFragment.items_list.getChildAdapterPosition(v)
+            // Log.d("HOLAAAA", "position: " + position)
+            val shop = shops.get(position)
+
+            // Router().navigateFromMainActivityToDetailActivity(this, itemSelected)
+            Router().navigateFromMainActivityToDetailActivity(this, shop)
+        }
     }
 
     private fun setupMap() {
         val getAllShopsInteractor: GetAllShopsInteractor = GetAllShopsInteractorImpl(this)
         getAllShopsInteractor.execute(object: SuccessCompletion<Shops> {
             override fun successCompletion(shops: Shops) {
+                this@MainActivity.shops = shops
+
                 initializeMap(shops)
 
                 setupList(shops)
@@ -132,13 +145,29 @@ class MainActivity : AppCompatActivity() {
     fun addAllPins(shops: Shops) {
         for (i in 0 until shops.count()) {
             val shop = shops.get(i)
-            // addPin(this.map !!, 40.416775,-3.703790 , shop.name)
-            addPin(this.map !!, shop.latitude.toDouble(), shop.longitude.toDouble(), shop.name)
+            addPin(this.map !!, shop.latitude.toDouble(), shop.longitude.toDouble(), shop.name, i)
         }
+
+        this.map?.setOnMarkerClickListener(this)
+
     }
 
-    fun addPin(map: GoogleMap, latitude: Double, longitude: Double, title: String) {
-        map.addMarker(MarkerOptions().position(LatLng(latitude, longitude)).title(title))
+    override fun onMarkerClick(p0: Marker?): Boolean {
+        val position = p0?.tag as Int
+
+        Router().navigateFromMainActivityToDetailActivity(this, shopInPosition(position))
+
+        return false
+    }
+
+    fun shopInPosition(position: Int): Shop {
+        return this.shops?.get(position)!!
+    }
+
+    fun addPin(map: GoogleMap, latitude: Double, longitude: Double, title: String, position: Int) {
+        val marker = map.addMarker(MarkerOptions().position(LatLng(latitude, longitude)).title(title))
+
+        marker.tag = position
     }
 
 

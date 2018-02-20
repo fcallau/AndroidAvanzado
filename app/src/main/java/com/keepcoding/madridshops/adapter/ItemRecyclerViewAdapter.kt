@@ -1,7 +1,6 @@
 package com.keepcoding.madridshops.adapter
 
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,15 +12,7 @@ import com.squareup.picasso.Picasso
 
 class ItemRecyclerViewAdapter(val items: List<Shop>) : RecyclerView.Adapter<ItemRecyclerViewAdapter.ItemViewHolder>() {
     var onClickListener: View.OnClickListener? = null
-
-    /*adapter.onClickListener = View.OnClickListener { v: View ->
-        *//*val position = itemsList.getChildAdapterPosition(v)
-        val tableIndex = arguments.getInt(TableListFragment.EXTRA_TABLE_INDEX, 0)
-
-        // Start ItemDetailActivity
-        startActivity(ItemDetailActivity.intent(activity, position, tableIndex))*//*
-        Log.d("HOLA", "Pressed list button")
-    }*/
+    var myItem: Shop? = null
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ItemViewHolder {
         val view = LayoutInflater.from(parent?.context).inflate(R.layout.content_item, parent, false)
@@ -43,10 +34,12 @@ class ItemRecyclerViewAdapter(val items: List<Shop>) : RecyclerView.Adapter<Item
         val image = itemView.findViewById<ImageView>(R.id.item_image)
 
         fun bindItem(item: Shop, position: Int) {
+            myItem = item
+
             name.text = item.name
 
             /*itemView.setOnClickListener {
-                Log.d("Hola", "Pressed button list")
+                Log.d("Hola", "Pressed button list. name: " + item.name)
             }*/
 
             Picasso.
@@ -55,5 +48,11 @@ class ItemRecyclerViewAdapter(val items: List<Shop>) : RecyclerView.Adapter<Item
                     placeholder(android.R.drawable.ic_delete).
                     into(image)
         }
+    }
+
+
+
+    fun getItem(): Shop {
+        return this.myItem !!
     }
 }
