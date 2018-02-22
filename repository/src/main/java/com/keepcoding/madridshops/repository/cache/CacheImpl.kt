@@ -11,9 +11,10 @@ import java.lang.ref.WeakReference
 internal class CacheImpl(context: Context): Cache {
     val context = WeakReference<Context>(context)
 
-    override fun getAllShops(success: (shops: List<ShopEntity>) -> Unit, error: (errorMessage: String) -> Unit) {
+    override fun getAllShops(entityType: Int, success: (shops: List<ShopEntity>) -> Unit, error: (errorMessage: String) -> Unit) {
         Thread(Runnable {
-            var shops = ShopDAO(cacheDBHelper()).query()
+            // var shops = ShopDAO(cacheDBHelper()).query()
+            var shops = ShopDAO(cacheDBHelper()).query(entityType)
             DispatchOnMainTread(Runnable {
                 if (shops.count() > 0) {
                     success(shops)
@@ -24,10 +25,10 @@ internal class CacheImpl(context: Context): Cache {
         }).run()
     }
 
-    override fun saveAllShops(shops: List<ShopEntity>, success: () -> Unit, error: (errorMessage: String) -> Unit) {
+    override fun saveAllShops(entityType: Int, shops: List<ShopEntity>, success: () -> Unit, error: (errorMessage: String) -> Unit) {
         Thread(Runnable {
             try {
-                shops.forEach { ShopDAO(cacheDBHelper()).insert(it) }
+                shops.forEach { ShopDAO(cacheDBHelper()).insert(entityType, it) }
 
                 DispatchOnMainTread(Runnable {
                     success()

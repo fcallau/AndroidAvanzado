@@ -16,9 +16,9 @@ class RepositoryImpl(context: Context): Repository {
     private val weakContext = WeakReference<Context>(context)
     private val cache: Cache = CacheImpl(weakContext.get() !!)
 
-    override fun getAllShops(success: (shops: List<ShopEntity>) -> Unit, error: (errorMessage: String) -> Unit) {
+    override fun getAllShops(entityType: Int, success: (shops: List<ShopEntity>) -> Unit, error: (errorMessage: String) -> Unit) {
         // read all Shops from cache
-        cache.getAllShops(
+        cache.getAllShops(entityType,
             success = {
                 // if there's shops in cache --> return them
 
@@ -26,15 +26,24 @@ class RepositoryImpl(context: Context): Repository {
             }, error = {
                 // if no shops in cache --> network
 
-                populateCache(success, error)
+                populateCache(entityType, success, error)
             })
     }
 
-    private fun populateCache(success: (shops: List<ShopEntity>) -> Unit, error: (errorMessage: String) -> Unit) {
+    private fun populateCache(entityType: Int, success: (shops: List<ShopEntity>) -> Unit, error: (errorMessage: String) -> Unit) {
         // perform network request
 
+        // FCB
+        var serverURL: String
+
+        if (entityType == 1) {
+            serverURL = BuildConfig.MADRID_SHOPS_SERVER_URL;
+        } else {
+            serverURL = BuildConfig.MADRID_ACTIVITIES_SERVER_URL;
+        }
+
         val jsonManager: GetJsonManager = GetJsonManagerVolleyImpl(weakContext.get() !!)
-        jsonManager.execute(BuildConfig.MADRID_SHOPS_SERVER_URL, success =  object: SuccessCompletion<String> {
+        jsonManager.execute(serverURL, success =  object: SuccessCompletion<String> {
             override fun successCompletion(e: String) {
                 val parser = JsonEntitiesParser()
                 var responseEntity: ShopsResponseEntity
@@ -45,7 +54,7 @@ class RepositoryImpl(context: Context): Repository {
                     return
                 }
                 // store result in cache
-                cache.saveAllShops(responseEntity.result, success = {
+                cache.saveAllShops(entityType, responseEntity.result, success = {
                     success(responseEntity.result)
                 }, error = {
                     error("Something happened on the way to heaven!")

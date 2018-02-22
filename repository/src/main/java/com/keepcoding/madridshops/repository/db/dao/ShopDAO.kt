@@ -16,19 +16,20 @@ internal class ShopDAO
     private val dbReadWriteConnection: SQLiteDatabase = dbHelper.writableDatabase
 
 
-    override fun insert(element: ShopEntity): Long {
+    override fun insert(entityType: Int, element: ShopEntity): Long {
         var id: Long = 0
 
-        id = dbReadWriteConnection.insert(DBConstants.TABLE_SHOP, null, contentValues(element))
+        id = dbReadWriteConnection.insert(DBConstants.TABLE_SHOP, null, contentValues(entityType, element))
 
         return id
     }
 
-    fun contentValues(shopEntity: ShopEntity): ContentValues {
+    fun contentValues(entityType: Int, shopEntity: ShopEntity): ContentValues {
         val content = ContentValues()
 
         content.put(DBConstants.KEY_SHOP_ID_JSON, shopEntity.id)
         content.put(DBConstants.KEY_SHOP_NAME , shopEntity.name)
+        content.put(DBConstants.KEY_SHOP_ENTITY_TYPE , entityType)
         content.put(DBConstants.KEY_SHOP_DESCRIPTION , shopEntity.description)
         content.put(DBConstants.KEY_SHOP_LATITUDE , shopEntity.latitude)
         content.put(DBConstants.KEY_SHOP_LONGITUDE , shopEntity.longitude)
@@ -72,7 +73,7 @@ internal class ShopDAO
         return entityFromCursor(cursor)!!
     }
 
-    override fun query(): List<ShopEntity> {
+    /*override fun query(): List<ShopEntity> {
         val queryResult = ArrayList<ShopEntity>()
 
         val cursor = dbReadOnlyConnection.query(
@@ -80,6 +81,26 @@ internal class ShopDAO
                 DBConstants.ALL_COLUMNS,
                 null,
                 null,
+                "",
+                "",
+                DBConstants.KEY_SHOP_DATABASE_ID)
+
+        while (cursor.moveToNext()) {
+            val se = entityFromCursor(cursor)
+            queryResult.add(se!!)
+        }
+
+        return queryResult
+    }*/
+
+    override fun query(entityType: Int): List<ShopEntity> {
+        val queryResult = ArrayList<ShopEntity>()
+
+        val cursor = dbReadOnlyConnection.query(
+                DBConstants.TABLE_SHOP,
+                DBConstants.ALL_COLUMNS,
+                DBConstants.KEY_SHOP_ENTITY_TYPE + " = ?",
+                arrayOf(entityType.toString()),
                 "",
                 "",
                 DBConstants.KEY_SHOP_DATABASE_ID)
@@ -122,10 +143,10 @@ internal class ShopDAO
         return cursor
     }
 
-    override fun update(id: Long, element: ShopEntity): Long {
+    override fun update(entityType: Int, id: Long, element: ShopEntity): Long {
         val numberOfRecordsUpdated = dbReadWriteConnection.update(
                 DBConstants.TABLE_SHOP,
-                contentValues(element)
+                contentValues(entityType, element)
                 , DBConstants.KEY_SHOP_DATABASE_ID + " = ?", arrayOf(id.toString()))
         return numberOfRecordsUpdated.toLong()
     }

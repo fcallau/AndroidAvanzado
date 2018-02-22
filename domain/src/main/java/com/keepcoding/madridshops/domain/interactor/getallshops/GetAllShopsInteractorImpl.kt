@@ -16,8 +16,8 @@ class GetAllShopsInteractorImpl(context: Context) : GetAllShopsInteractor {
     private val weakContext = WeakReference<Context>(context)
     private val repository: Repository = RepositoryImpl(weakContext.get() !!)
 
-    override fun execute(success: SuccessCompletion<Shops>, error: ErrorCompletion) {
-        repository.getAllShops(success = {
+    override fun execute(entityType: Int, success: SuccessCompletion<Shops>, error: ErrorCompletion) {
+        repository.getAllShops(entityType, success = {
             val shops: Shops = entityMapper(it)
             success.successCompletion(shops)
         }, error = {

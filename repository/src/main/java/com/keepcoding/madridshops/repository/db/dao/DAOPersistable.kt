@@ -4,13 +4,16 @@ import android.database.Cursor
 
 interface DAOReadOperations<T> {
     fun query(id: Long): T
-    fun query(): List<T>
+    // fun query(): List<T>
+    fun query(entityType: Int): List<T>
     fun queryCursor(id: Long): Cursor
 }
 
 interface DAOWriteOperations<T> {
-    fun insert(element: T): Long
-    fun update(id: Long, element: T): Long
+    // fun insert(element: T): Long
+    fun insert(entityType: Int, element: T): Long
+    // fun update(id: Long, element: T): Long
+    fun update(entityType: Int, id: Long, element: T): Long
 
     /**
      * deletes the element passed from DB

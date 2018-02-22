@@ -9,7 +9,7 @@ import com.keepcoding.madridshops.domain.model.Shops
 import java.util.*
 
 class GetAllShopsInteractorFakeImpl: GetAllShopsInteractor {
-    override fun execute(success: SuccessCompletion<Shops>, error: ErrorCompletion) {
+    override fun execute(entityType: Int, success: SuccessCompletion<Shops>, error: ErrorCompletion) {
         var allOk = true
 
         // connect to the repository

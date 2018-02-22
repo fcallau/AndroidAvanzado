@@ -56,10 +56,22 @@ class MapListActivity : AppCompatActivity(), GoogleMap.OnMarkerClickListener {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true);
 
+        // EXTRA_TEXT_BUTTON = "shops" o "activities"
+
         Log.d("App", "onCreate MapListActivity")
         Log.d("TEXT_BUTTON", "> " + intent.getStringExtra(EXTRA_TEXT_BUTTON))
 
-        setupMap()
+        if (shops == null) {
+            Log.d("shops info", "es nulo")
+        } else {
+            Log.d("shops info", "tiene info")
+        }
+
+        if (intent.getStringExtra(EXTRA_TEXT_BUTTON) == "shops") {
+            setupMap(1)
+        } else {
+            setupMap(2)
+        }
     }
 
     private fun setupList(shops: Shops) {
@@ -82,9 +94,9 @@ class MapListActivity : AppCompatActivity(), GoogleMap.OnMarkerClickListener {
         }
     }
 
-    private fun setupMap() {
+    private fun setupMap(entityType: Int) {
         val getAllShopsInteractor: GetAllShopsInteractor = GetAllShopsInteractorImpl(this)
-        getAllShopsInteractor.execute(object: SuccessCompletion<Shops> {
+        getAllShopsInteractor.execute(entityType, object: SuccessCompletion<Shops> {
             override fun successCompletion(shops: Shops) {
                 this@MapListActivity.shops = shops
 
@@ -163,6 +175,8 @@ class MapListActivity : AppCompatActivity(), GoogleMap.OnMarkerClickListener {
         val position = p0?.tag as Int
 
         // Router().navigateFromMainActivityToDetailActivity(this, shopInPosition(position))
+        // Router().navigateFromMainActivityToDetailActivity(this, shop)
+        Router().navigateFromMapListActivityToDetailActivity(this, shopInPosition(position))
 
         return false
     }

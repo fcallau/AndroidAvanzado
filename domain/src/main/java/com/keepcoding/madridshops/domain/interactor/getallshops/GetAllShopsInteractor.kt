@@ -5,5 +5,6 @@ import com.keepcoding.madridshops.domain.interactor.SuccessCompletion
 import com.keepcoding.madridshops.domain.model.Shops
 
 interface GetAllShopsInteractor {
-    fun execute(success: SuccessCompletion<Shops>, error: ErrorCompletion)
+    // fun execute(success: SuccessCompletion<Shops>, error: ErrorCompletion)
+    fun execute(entityType: Int, success: SuccessCompletion<Shops>, error: ErrorCompletion)
 }

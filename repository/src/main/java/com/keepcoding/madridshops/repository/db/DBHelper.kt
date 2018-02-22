@@ -3,6 +3,7 @@ package com.keepcoding.madridshops.repository.db
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 
 internal fun build(context: Context, name: String, version: Int): DBHelper {
     return DBHelper(context, name, null, version)
@@ -18,6 +19,8 @@ internal class DBHelper(context: Context?, name: String?, factory: SQLiteDatabas
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
+        Log.d("class DBHelper", "onCreate")
+
         DBConstants.CREATE_DATABASE_SCRIPTS.forEach { db?.execSQL(it) }
     }
 

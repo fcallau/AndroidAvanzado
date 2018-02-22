@@ -32,11 +32,9 @@ class MadridShopsApp: MultiDexApplication() {
 
         Log.d("App", "onCreate")
 
-        Log.d("App", BuildConfig.MADRID_SHOPS_SERVER_URL)
+        // Log.d("App", BuildConfig.MADRID_SHOPS_SERVER_URL)
 
-
-
-        val allShopsInteractor = GetAllShopsInteractorImpl(this)
+        /*val allShopsInteractor = GetAllShopsInteractorImpl(this)
 
         allShopsInteractor.execute(object: SuccessCompletion<Shops> {
             override fun successCompletion(shops: Shops) {
@@ -48,7 +46,7 @@ class MadridShopsApp: MultiDexApplication() {
             override fun errorCompletion(errorMessage: String) {
                 Log.d("ERROR", errorMessage)
             }
-        })
+        })*/
 
 
         /*
