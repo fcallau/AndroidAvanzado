@@ -14,7 +14,7 @@
             android:id="@+id/detail_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp" />
+            android:padding="@dimen/low_dp" />
 
         <ImageView
             android:id="@+id/detail_image"
@@ -22,14 +22,14 @@
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             android:backgroundTint="@color/colorAccent"
-            android:contentDescription="Image of the item"
-            android:padding="8dp"/>
+            android:contentDescription="@string/image_of_the_item"
+            android:padding="@dimen/low_dp"/>
 
         <TextView
             android:id="@+id/detail_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp"
+            android:padding="@dimen/low_dp"
             android:textAlignment="center"
             android:textColor="#792532"
             android:background="#CCCCCC" />
@@ -40,8 +40,8 @@
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             android:backgroundTint="@color/colorAccent"
-            android:contentDescription="Map of the item"
-            android:padding="8dp"/>
+            android:contentDescription="@string/map_of_the_item"
+            android:padding="@dimen/low_dp"/>
 
     </LinearLayout>
 

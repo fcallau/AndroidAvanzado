@@ -50,22 +50,9 @@ class MapListActivity : AppCompatActivity(), GoogleMap.OnMarkerClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // setContentView(R.layout.activity_main)
         setContentView(R.layout.content_main)
-        // setSupportActionBar(toolbar)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true);
-
-        // EXTRA_TEXT_BUTTON = "shops" o "activities"
-
-        Log.d("App", "onCreate MapListActivity")
-        Log.d("TEXT_BUTTON", "> " + intent.getStringExtra(EXTRA_TEXT_BUTTON))
-
-        if (shops == null) {
-            Log.d("shops info", "es nulo")
-        } else {
-            Log.d("shops info", "tiene info")
-        }
 
         if (intent.getStringExtra(EXTRA_TEXT_BUTTON) == "shops") {
             setupMap(1)
@@ -76,7 +63,7 @@ class MapListActivity : AppCompatActivity(), GoogleMap.OnMarkerClickListener {
 
     private fun setupList(shops: Shops) {
         val listFragment = supportFragmentManager.findFragmentById(R.id.activity_main_list_fragment)
-        val mainActivityContext = this.baseContext
+        // val mainActivityContext = this.baseContext
 
         val adapter = ItemRecyclerViewAdapter(shops.all())
         listFragment.items_list.layoutManager = GridLayoutManager(this, 1)
@@ -89,7 +76,6 @@ class MapListActivity : AppCompatActivity(), GoogleMap.OnMarkerClickListener {
             val position = listFragment.items_list.getChildAdapterPosition(v)
             val shop = shops.get(position)
 
-            // Router().navigateFromMainActivityToDetailActivity(this, shop)
             Router().navigateFromMapListActivityToDetailActivity(this, shop)
         }
     }
@@ -115,7 +101,6 @@ class MapListActivity : AppCompatActivity(), GoogleMap.OnMarkerClickListener {
     private fun initializeMap(shops: Shops) {
         val mapFragment = supportFragmentManager.findFragmentById(R.id.activity_main_map_fragment) as SupportMapFragment
         mapFragment.getMapAsync({ mapa ->
-            Log.d("SUCCESS", "HABEMUS MAPA")
 
             centerMapInPosition(mapa,40.416775,-3.703790)
             mapa.uiSettings.isRotateGesturesEnabled = false
@@ -174,8 +159,6 @@ class MapListActivity : AppCompatActivity(), GoogleMap.OnMarkerClickListener {
     override fun onMarkerClick(p0: Marker?): Boolean {
         val position = p0?.tag as Int
 
-        // Router().navigateFromMainActivityToDetailActivity(this, shopInPosition(position))
-        // Router().navigateFromMainActivityToDetailActivity(this, shop)
         Router().navigateFromMapListActivityToDetailActivity(this, shopInPosition(position))
 
         return false
@@ -192,18 +175,16 @@ class MapListActivity : AppCompatActivity(), GoogleMap.OnMarkerClickListener {
     }
 
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_main, menu)
+    /*override fun onCreateOptionsMenu(menu: Menu): Boolean {
         return true
-    }
+    }*/
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
 
-        if (item?.itemId == android.R.id.home) {
+        if (item.itemId == android.R.id.home) {
             this.finish()
         } else {
             Router().navigateFromMapListActivityToPicassoActivity(this)

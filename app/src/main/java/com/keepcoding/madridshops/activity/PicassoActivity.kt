@@ -19,7 +19,7 @@ class PicassoActivity : AppCompatActivity() {
         Picasso.
                 with(this).
                 load("http://stillcracking.com/wp-content/uploads/2014/05/c5731d46405fb1226cad6eef30c99ce145e7894eb7948b4180e78e0b3a32aaca_1.jpg").
-                placeholder(android.R.drawable.ic_delete).
+                placeholder(R.drawable.placeholder).
                 into(img1)
 
 

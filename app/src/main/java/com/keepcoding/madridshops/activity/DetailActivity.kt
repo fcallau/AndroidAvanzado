@@ -44,14 +44,14 @@ class DetailActivity : AppCompatActivity() {
 
         Picasso.with(this).
                 load(myShop.img).
-                placeholder(android.R.drawable.ic_delete).
+                placeholder(R.drawable.placeholder).
                 into(image)
 
         address.text = myShop.address
 
         Picasso.with(this).
                 load("https://maps.googleapis.com/maps/api/staticmap?%25&size=320x220&scale=2&markers=" + myShop.latitude + "," + myShop.longitude).
-                placeholder(android.R.drawable.ic_delete).
+                placeholder(R.drawable.placeholder).
                 into(map)
     }
 

@@ -45,7 +45,7 @@ class ItemRecyclerViewAdapter(val items: List<Shop>) : RecyclerView.Adapter<Item
             Picasso.
                     with(this.itemView.context).
                     load(item.logo).
-                    placeholder(android.R.drawable.ic_delete).
+                    placeholder(R.drawable.placeholder).
                     into(image)
         }
     }

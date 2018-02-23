@@ -1,6 +1,10 @@
 <resources>
     <string name="action_settings">Settings</string>
+    <string name="shops_text">Shops</string>
+    <string name="activities_text">Activities</string>
+    <string name="image_of_the_item">Image of the item</string>
+    <string name="map_of_the_item">Map of the item</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!--<string name="hello_blank_fragment">Hello blank fragment</string>-->
 </resources>

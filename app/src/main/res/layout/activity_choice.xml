@@ -14,7 +14,7 @@
         android:id="@+id/choice_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingVertical="20dp"
+        android:paddingVertical="@dimen/v_padding_text"
         android:text="Choice one option"
         android:textAlignment="center" />
 
@@ -23,13 +23,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/choice_text"
-        android:text="Shops" />
+        android:text="@string/shops_text" />
 
     <Button
         android:id="@+id/choice_activities_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/choice_shops_button"
-        android:text="Activities" />
+        android:text="@string/activities_text" />
 
 </LinearLayout>
